@@ -48,25 +48,30 @@ public class RegisterActivity extends AppCompatActivity {
                 }
                 final String email = e2.getText().toString();
                 if(email.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"Email cannot be empty", Toast.LENGTH_LONG).show();
+                    e2.setError("Email cannot be empty");
+                    e2.requestFocus();
                     return ;
                 }
                 if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                    Toast.makeText(getApplicationContext(),"Email is invalid", Toast.LENGTH_LONG).show();
+                    e2.setError("Email is invalid");
+                    e2.requestFocus();
                     return ;
                 }
                 final String password = e3.getText().toString();
                 if(password.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"Password cannot be empty", Toast.LENGTH_LONG).show();
+                    e3.setError("Password cannot be empty");
+                    e3.requestFocus();
                     return ;
                 }
                 if (password.length()<6){
-                    Toast.makeText(getApplicationContext(),"Password should be at least 6 digits", Toast.LENGTH_LONG).show();
+                    e3.setError("Password should be at least 6 digits");
+                    e3.requestFocus();
                     return ;
                 }
                 final String ageS = e4.getText().toString();
                 if (ageS.isEmpty()) {
-                    Toast.makeText(getApplicationContext(),"Age cannot be empty", Toast.LENGTH_LONG).show();
+                    e4.setError("Age cannot be empty");
+                    e4.requestFocus();
                     return;
                 }
                 final int age = Integer.parseInt(ageS);
@@ -108,7 +113,8 @@ public class RegisterActivity extends AppCompatActivity {
                             });
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"Age out of bound", Toast.LENGTH_LONG).show();
+                    e4.setError("Age out of bound");
+                    e4.requestFocus();
                 }
             }
         });

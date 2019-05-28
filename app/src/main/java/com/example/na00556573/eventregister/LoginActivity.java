@@ -32,28 +32,41 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String email=e1.getText().toString();
                 if(email.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"Email cannot be empty", Toast.LENGTH_LONG).show();
+                    e1.setError("Email cannot be empty");
+                    e1.requestFocus();
+                    e2.getText().clear();
                     return ;
                 }
                 if(!Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-                    Toast.makeText(getApplicationContext(),"Email is invalid", Toast.LENGTH_LONG).show();
+                    e1.setError("Email is invalid");
+                    e1.requestFocus();
+                    e2.getText().clear();
                     return ;
                 }
                 String password=e2.getText().toString();
                 if(password.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"Password cannot be empty", Toast.LENGTH_LONG).show();
+                    e2.setError("Password cannot be empty");
+                    e2.requestFocus();
+                    e2.getText().clear();
                     return ;
                 }
                 mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
-                            Toast.makeText(getApplicationContext(),"Login Successful", Toast.LENGTH_LONG).show();
-                            Intent i = new Intent(LoginActivity.this,Events.class);
-                            startActivity(i);
+                        if(task.isSuccessful()) {
+                            if (mAuth.getCurrentUser().isEmailVerified()) {
+                                Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
+                                Intent i = new Intent(LoginActivity.this, Events.class);
+                                startActivity(i);
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "Email Not Verified", Toast.LENGTH_LONG).show();
+                                e2.getText().clear();
+                            }
 
                         }else {
                             Toast.makeText(getApplicationContext(), "Email ID or password is incorrect", Toast.LENGTH_SHORT).show();
+                            e2.getText().clear();
                         }
                     }
                 });
