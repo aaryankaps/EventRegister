@@ -95,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         e3.getText().clear();
                                         e4.getText().clear();
                                         FirebaseDatabase database = FirebaseDatabase.getInstance();
-                                        DatabaseReference myRef = database.getReference("Users");
+                                        DatabaseReference myRef = database.getReference("Unverified");
                                         myRef.child(user.getUid()).child("Email").setValue(email);
                                         myRef.child(user.getUid()).child("Name").setValue(name);
                                         myRef.child(user.getUid()).child("Age").setValue(age);

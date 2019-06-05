@@ -15,6 +15,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import static java.sql.Types.NULL;
+
 public class LoginActivity extends AppCompatActivity {
     private Button logBut;
     private EditText e1, e2;
@@ -55,7 +57,8 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()) {
                             if (mAuth.getCurrentUser().isEmailVerified()) {
-                                Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
+                                //Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
+
                                 Intent i = new Intent(LoginActivity.this, Events.class);
                                 startActivity(i);
                             }
