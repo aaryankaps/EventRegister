@@ -45,9 +45,9 @@ public class Events extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +81,7 @@ public class Events extends AppCompatActivity {
 
             }
         });
-        lv= (ListView)findViewById(R.id.EventList);
+        lv= findViewById(R.id.EventList);
 
         Query query = FirebaseDatabase.getInstance().getReference().child("Events");
         FirebaseListOptions<EventValue> options = new FirebaseListOptions.Builder<EventValue>()
@@ -113,7 +113,6 @@ public class Events extends AppCompatActivity {
                         String td= tm.substring(0,2).compareTo("12")>=0 ? "PM":  "AM";
                         String hh = tm.substring(0,2).compareTo("12")>0 ? (tm.charAt(0)-'1')+""+(tm.charAt(1)-'2'):  tm.substring(0,2);
                         String mn = tm.substring(2,4);
-
 
                         Name.setText(ev.getName());
                         Date.setText(dd + "/" + mm + "/" + yy);

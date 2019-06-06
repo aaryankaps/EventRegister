@@ -28,12 +28,12 @@ import java.util.Calendar;
 import static android.widget.RelativeLayout.TRUE;
 
 public class NeweventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
-    private String name, date, time, venue;
+    private String name, d, m, y, date, time, venue;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newevent);
-        Button datebtn = (Button)findViewById(R.id.newDateBtn);
+        Button datebtn = findViewById(R.id.newDateBtn);
         date="";
         time="";
         datebtn.setOnClickListener(new View.OnClickListener() {
@@ -43,7 +43,7 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
                 datePicker.show(getSupportFragmentManager(),"date picker");
             }
         });
-        Button timebtn = (Button)findViewById(R.id.newTimeBtn);
+        Button timebtn = findViewById(R.id.newTimeBtn);
         timebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,12 +52,12 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
             }
         });
 
-        Button addbtn = (Button)findViewById(R.id.newEventBtn);
+        Button addbtn = findViewById(R.id.newEventBtn);
         addbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final EditText nEt=(EditText)findViewById(R.id.newName);
-                final EditText vEt=(EditText)findViewById(R.id.newVenue);
+                final EditText nEt= findViewById(R.id.newName);
+                final EditText vEt= findViewById(R.id.newVenue);
                 name=nEt.getText().toString();
                 if(name.isEmpty()){
                     nEt.setError("Name cannot be empty");
@@ -84,19 +84,23 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
                 DatabaseReference myRef = database.getReference("Events");
                 FirebaseAuth mAuth=FirebaseAuth.getInstance();
                 FirebaseUser user = mAuth.getCurrentUser();
-                myRef.child(date+time+venue).child("Name").setValue(name);
-                myRef.child(date+time+venue).child("Date").setValue(date);
-                myRef.child(date+time+venue).child("Time").setValue(time);
-                myRef.child(date+time+venue).child("Venue").setValue(venue);
-                myRef.child(date+time+venue).child("AddedBY").setValue(user.getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                myRef.child(y+m+d+time+venue).child("Name").setValue(name);
+                myRef.child(y+m+d+time+venue).child("Date").setValue(date);
+                myRef.child(y+m+d+time+venue).child("Time").setValue(time);
+                myRef.child(y+m+d+time+venue).child("Venue").setValue(venue);
+                myRef.child(y+m+d+time+venue).child("AddedBY").setValue(user.getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         nEt.getText().clear();
+                        name="";
                         vEt.getText().clear();
-                        TextView et=(TextView)findViewById(R.id.newDate);
+                        venue="";
+                        TextView et= findViewById(R.id.newDate);
                         et.setText("Date");
-                        et=(TextView)findViewById(R.id.newTime);
+                        date="";
+                        et= findViewById(R.id.newTime);
                         et.setText("Time");
+                        time="";
                         Toast.makeText(getApplicationContext(),"Event added successfully",Toast.LENGTH_SHORT).show();
 
                     }
@@ -112,7 +116,6 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
         c.set(Calendar.YEAR,year);
         c.set(Calendar.MONTH,month);
         c.set(Calendar.DAY_OF_MONTH,dayOfMonth);
-        String d, m;
         if(dayOfMonth<10){
             d = "0"+dayOfMonth;
         }
@@ -125,16 +128,17 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
         else{
             m=""+(month+1);
         }
-        date=d+m+year;
+        y=""+year;
+        date=d+m+y;
         String currentDate = DateFormat.getDateInstance(DateFormat.LONG).format(c.getTime());
-        TextView tv= (TextView)findViewById(R.id.newDate);
+        TextView tv= findViewById(R.id.newDate);
         tv.setText(currentDate);
     }
 
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-        TextView tv= (TextView)findViewById(R.id.newTime);
-        String h, m;
+        TextView tv= findViewById(R.id.newTime);
+        String h, mn;
         if(hourOfDay<10){
             h="0"+hourOfDay;
         }
@@ -142,12 +146,12 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
             h=""+hourOfDay;
         }
         if(minute<10){
-            m="0"+minute;
+            mn="0"+minute;
         }
         else{
-            m=""+minute;
+            mn=""+minute;
         }
-        time= h+m;
+        time= h+mn;
         tv.setText("Hour: "+hourOfDay + " Minute: "+minute);
 
    }

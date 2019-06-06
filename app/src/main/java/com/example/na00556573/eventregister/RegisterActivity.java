@@ -23,27 +23,28 @@ public class RegisterActivity extends AppCompatActivity {
     private Button but;
     private EditText e1, e2, e3, e4;
     private FirebaseAuth mAuth;
+    private String name, email, ageS, password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regiter);
-        but=(Button)findViewById(R.id.button);
-        e1=(EditText)findViewById(R.id.editText);
-        e2=(EditText)findViewById(R.id.editText2);
-        e3=(EditText)findViewById(R.id.editText3);
-        e4=(EditText)findViewById(R.id.editText4);
+        but= findViewById(R.id.button);
+        e1= findViewById(R.id.editText);
+        e2= findViewById(R.id.editText2);
+        e3= findViewById(R.id.editText3);
+        e4= findViewById(R.id.editText4);
         mAuth = FirebaseAuth.getInstance();
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final String name = e1.getText().toString();
+                name = e1.getText().toString();
                 if(name.isEmpty()){
                     //Toast.makeText(getApplicationContext(),"Name cannot be empty", Toast.LENGTH_LONG).show();
                     e1.setError("Name cannot be empty");
                     e1.requestFocus();
                     return ;
                 }
-                final String email = e2.getText().toString();
+                email = e2.getText().toString();
                 if(email.isEmpty()){
                     e2.setError("Email cannot be empty");
                     e2.requestFocus();
@@ -54,7 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
                     e2.requestFocus();
                     return ;
                 }
-                final String password = e3.getText().toString();
+                password = e3.getText().toString();
                 if(password.isEmpty()){
                     e3.setError("Password cannot be empty");
                     e3.requestFocus();
@@ -65,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity {
                     e3.requestFocus();
                     return ;
                 }
-                final String ageS = e4.getText().toString();
+                ageS = e4.getText().toString();
                 if (ageS.isEmpty()) {
                     e4.setError("Age cannot be empty");
                     e4.requestFocus();
@@ -87,9 +88,13 @@ public class RegisterActivity extends AppCompatActivity {
                                                 Toast.makeText(RegisterActivity.this,"Verification Email Sent", Toast.LENGTH_SHORT );
                                             }
                                         });
+                                        name="";
                                         e1.getText().clear();
+                                        email="";
                                         e2.getText().clear();
+                                        password="";
                                         e3.getText().clear();
+                                        ageS="";
                                         e4.getText().clear();
                                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                                         DatabaseReference myRef = database.getReference("Unverified");

@@ -25,9 +25,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        logBut=(Button)findViewById(R.id.email_sign_in_button);
-        e1=(EditText) findViewById(R.id.email);
-        e2=(EditText) findViewById(R.id.password);
+        logBut= findViewById(R.id.email_sign_in_button);
+        e1= findViewById(R.id.email);
+        e2= findViewById(R.id.password);
         mAuth=FirebaseAuth.getInstance();
         logBut.setOnClickListener(new View.OnClickListener() {
             @Override
