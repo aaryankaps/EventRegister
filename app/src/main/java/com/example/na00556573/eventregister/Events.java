@@ -1,5 +1,6 @@
 package com.example.na00556573.eventregister;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -50,7 +51,8 @@ public class Events extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openDialog();
+                Intent i= new Intent(getApplicationContext(),NeweventActivity.class);
+                startActivity(i);
             }
         });
         mAuth = FirebaseAuth.getInstance();

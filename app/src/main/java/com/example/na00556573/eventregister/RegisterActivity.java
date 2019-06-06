@@ -36,9 +36,6 @@ public class RegisterActivity extends AppCompatActivity {
         but.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // FirebaseDatabase database = FirebaseDatabase.getInstance();
-                // DatabaseReference myRef = database.getReference("message");
-                // myRef.setValue("Hello, World!");
                 final String name = e1.getText().toString();
                 if(name.isEmpty()){
                     //Toast.makeText(getApplicationContext(),"Name cannot be empty", Toast.LENGTH_LONG).show();
