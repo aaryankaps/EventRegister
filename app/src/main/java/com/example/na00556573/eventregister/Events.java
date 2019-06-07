@@ -10,6 +10,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -104,6 +105,7 @@ public class Events extends AppCompatActivity {
                     java.util.Date d = sdf.parse(dd + "/" + mm + "/" + yy);
                     if (d.compareTo(c)>=0){
                         //((ViewGroup)v.getParent()).removeView(v);
+                        ImageView image= v.findViewById(R.id.image);
                         TextView Name = v.findViewById(R.id.name);
                         TextView Date = v.findViewById(R.id.date);
                         TextView Time = v.findViewById(R.id.time);
@@ -118,6 +120,7 @@ public class Events extends AppCompatActivity {
                         Date.setText(dd + "/" + mm + "/" + yy);
                         Time.setText(hh+":"+mn+" " +td);
                         Venue.setText(ev.getVenue());
+                        Picasso.with(Events.this).load(ev.getImage().toString()).into(image);
                     }
                 }catch (Exception e){
                     e.printStackTrace();

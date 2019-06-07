@@ -5,12 +5,22 @@ public class EventValue {
     private String Date;
     private String Time;
     private String Venue;
+    private String Image;
 
-    public EventValue(String name, String date, String time, String venue) {
+    public String getImage() {
+        return Image;
+    }
+
+    public void setImage(String image) {
+        Image = image;
+    }
+
+    public EventValue(String name, String date, String time, String venue, String image) {
         Name = name;
         Date = date;
         Time = time;
         Venue = venue;
+        Image = image;
     }
 
     public EventValue() {
