@@ -209,7 +209,7 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
                             myRef.child(y+m+d+time+venue).child("Time").setValue(time);
                             myRef.child(y+m+d+time+venue).child("Venue").setValue(venue);
                             myRef.child(y+m+d+time+venue).child("Image").setValue(url);
-                            myRef.child(y+m+d+time+venue).child("AddedBY").setValue(user.getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            myRef.child(y+m+d+time+venue).child("AddedBy").setValue(user.getUid()).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
                                     nEt.getText().clear();

@@ -1,19 +1,13 @@
 package com.example.na00556573.eventregister;
 
 public class EventValue {
+
+    private String AddedBy;
     private String Name;
     private String Date;
     private String Time;
     private String Venue;
     private String Image;
-
-    public String getImage() {
-        return Image;
-    }
-
-    public void setImage(String image) {
-        Image = image;
-    }
 
     public EventValue(String name, String date, String time, String venue, String image) {
         Name = name;
@@ -24,6 +18,14 @@ public class EventValue {
     }
 
     public EventValue() {
+    }
+
+    public String getAddedBy() {
+        return AddedBy;
+    }
+
+    public void setAddedBy(String addedBy) {
+        AddedBy = addedBy;
     }
 
     public void setName(String name) {
@@ -56,5 +58,13 @@ public class EventValue {
 
     public String getVenue() {
         return Venue;
+    }
+
+    public String getImage() {
+        return Image;
+    }
+
+    public void setImage(String image) {
+        Image = image;
     }
 }

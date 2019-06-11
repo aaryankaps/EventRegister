@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -103,6 +104,7 @@ public class Events extends AppCompatActivity {
                     java.util.Date d = sdf.parse(dd + "/" + mm + "/" + yy);
                     if (d.compareTo(c)>=0){
                         //((ViewGroup)v.getParent()).removeView(v);
+                        final TextView host=v.findViewById(R.id.host);
                         ImageView image= v.findViewById(R.id.image);
                         TextView Name = v.findViewById(R.id.name);
                         TextView Date = v.findViewById(R.id.date);
@@ -114,11 +116,33 @@ public class Events extends AppCompatActivity {
                         String hh = tm.substring(0,2).compareTo("12")>0 ? (tm.charAt(0)-'1')+""+(tm.charAt(1)-'2'):  tm.substring(0,2);
                         String mn = tm.substring(2,4);
 
+                        DatabaseReference drhst=FirebaseDatabase.getInstance().getReference("Users").child(ev.getAddedBy()).child("Name");
+                        drhst.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                String hst=dataSnapshot.getValue(String.class);
+                                host.setText(hst);
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
                         Name.setText(ev.getName());
                         Date.setText(dd + "/" + mm + "/" + yy);
                         Time.setText(hh+":"+mn+" " +td);
                         Venue.setText(ev.getVenue());
+
                         Picasso.with(Events.this).load(ev.getImage().toString()).into(image);
+                        image.getLayoutParams().height = 600;
+
+                        image.getLayoutParams().width = 600;
+
+                        image.setScaleType(ImageView.ScaleType.FIT_XY);
+
+
+
                     }
                 }catch (Exception e){
                     e.printStackTrace();
