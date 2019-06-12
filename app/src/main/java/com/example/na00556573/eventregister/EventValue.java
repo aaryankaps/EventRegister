@@ -8,13 +8,16 @@ public class EventValue {
     private String Time;
     private String Venue;
     private String Image;
+    private String Likes;
 
-    public EventValue(String name, String date, String time, String venue, String image) {
+    public EventValue(String addedBy, String name, String date, String time, String venue, String image, String likes) {
+        AddedBy = addedBy;
         Name = name;
         Date = date;
         Time = time;
         Venue = venue;
         Image = image;
+        Likes = likes;
     }
 
     public EventValue() {
@@ -66,5 +69,13 @@ public class EventValue {
 
     public void setImage(String image) {
         Image = image;
+    }
+
+    public String getLikes() {
+        return Likes;
+    }
+
+    public void setLikes(String likes) {
+        Likes = likes;
     }
 }

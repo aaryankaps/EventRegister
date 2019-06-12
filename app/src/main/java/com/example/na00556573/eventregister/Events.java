@@ -110,6 +110,9 @@ public class Events extends AppCompatActivity {
                         TextView Date = v.findViewById(R.id.date);
                         TextView Time = v.findViewById(R.id.time);
                         TextView Venue= v.findViewById(R.id.venue);
+                        Button Like = v.findViewById(R.id.like);
+                        TextView NoLikes= v.findViewById(R.id.nolike);
+                        int numL = Integer.parseInt(ev.getLikes());
 
                         String tm = ev.getTime();
                         String td= tm.substring(0,2).compareTo("12")>=0 ? "PM":  "AM";
@@ -129,16 +132,49 @@ public class Events extends AppCompatActivity {
 
                             }
                         });
+                        final DatabaseReference drLike=FirebaseDatabase.getInstance().getReference("Likes").child(userID).child(yy+mm+dd+ev.getTime()+venue);
+                        drLike.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                if(dataSnapshot.exists()) {
+                                    Like.setText("Unlike");
+                                }
+                                else{
+                                    Like.setText("Like");
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                            }
+                        });
+                        final DatabaseReference drNLike = FirebaseDatabase.getInstance().getReference("Events").child(yy+mm+dd+ev.getTime()+venue);
+                        Like.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                if(Like.getText().toString().matches("Like")){
+                                    Like.setText("Unlike");
+                                    numL++;
+                                    drLike.setValue("True");
+                                }
+                                else{
+                                    Like.setText("Like");
+                                    numL--;
+                                    drLike.setValue(null);
+                                }
+                                drNLike.child("Likes").setValue(numL.toString())
+                            }
+                        });
                         Name.setText(ev.getName());
                         Date.setText(dd + "/" + mm + "/" + yy);
                         Time.setText(hh+":"+mn+" " +td);
                         Venue.setText(ev.getVenue());
+                        NoLikes.setText(numL.toString());
 
                         Picasso.with(Events.this).load(ev.getImage().toString()).into(image);
                         image.getLayoutParams().height = 600;
-
                         image.getLayoutParams().width = 600;
-
                         image.setScaleType(ImageView.ScaleType.FIT_XY);
 
 
