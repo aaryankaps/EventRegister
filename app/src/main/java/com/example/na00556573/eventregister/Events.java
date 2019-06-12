@@ -112,6 +112,7 @@ public class Events extends AppCompatActivity {
                         TextView Venue= v.findViewById(R.id.venue);
                         Button Like = v.findViewById(R.id.like);
                         TextView NoLikes= v.findViewById(R.id.nolike);
+                        Button Comment = v.findViewById(R.id.comment);
                         int numL = Integer.parseInt(ev.getLikes());
 
                         String tm = ev.getTime();
@@ -166,6 +167,13 @@ public class Events extends AppCompatActivity {
                                 drNLike.child("Likes").setValue(numL.toString())
                             }
                         });
+                        Comment.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Intent i= new Intent(getApplicationContext(),CommentSection.class);
+                                startActivity(i);
+                            }
+                        }
                         Name.setText(ev.getName());
                         Date.setText(dd + "/" + mm + "/" + yy);
                         Time.setText(hh+":"+mn+" " +td);
