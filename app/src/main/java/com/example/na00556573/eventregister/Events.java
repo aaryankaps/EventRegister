@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -110,10 +111,10 @@ public class Events extends AppCompatActivity {
                         TextView Date = v.findViewById(R.id.date);
                         TextView Time = v.findViewById(R.id.time);
                         TextView Venue= v.findViewById(R.id.venue);
-                        Button Like = v.findViewById(R.id.like);
+                        final Button Like = v.findViewById(R.id.like);
                         TextView NoLikes= v.findViewById(R.id.nolike);
                         Button Comment = v.findViewById(R.id.comment);
-                        int numL = Integer.parseInt(ev.getLikes());
+                        final int[] numL = {Integer.parseInt(ev.getLikes())};
 
                         String tm = ev.getTime();
                         String td= tm.substring(0,2).compareTo("12")>=0 ? "PM":  "AM";
@@ -133,7 +134,7 @@ public class Events extends AppCompatActivity {
 
                             }
                         });
-                        final DatabaseReference drLike=FirebaseDatabase.getInstance().getReference("Likes").child(userID).child(yy+mm+dd+ev.getTime()+venue);
+                        final DatabaseReference drLike=FirebaseDatabase.getInstance().getReference("Likes").child(userID).child(yy+mm+dd+ev.getTime()+ev.getVenue());
                         drLike.addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -150,35 +151,37 @@ public class Events extends AppCompatActivity {
 
                             }
                         });
-                        final DatabaseReference drNLike = FirebaseDatabase.getInstance().getReference("Events").child(yy+mm+dd+ev.getTime()+venue);
+
+                        final DatabaseReference drNLike = FirebaseDatabase.getInstance().getReference("Events").child(yy+mm+dd+ev.getTime()+ev.getVenue());
                         Like.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
                                 if(Like.getText().toString().matches("Like")){
                                     Like.setText("Unlike");
-                                    numL++;
+                                    numL[0]++;
                                     drLike.setValue("True");
                                 }
                                 else{
                                     Like.setText("Like");
-                                    numL--;
+                                    numL[0]--;
                                     drLike.setValue(null);
                                 }
-                                drNLike.child("Likes").setValue(numL.toString())
+                                drNLike.child("Likes").setValue(Integer.toString(numL[0]));
                             }
                         });
                         Comment.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+
                                 Intent i= new Intent(getApplicationContext(),CommentSection.class);
                                 startActivity(i);
                             }
-                        }
+                        });
                         Name.setText(ev.getName());
                         Date.setText(dd + "/" + mm + "/" + yy);
                         Time.setText(hh+":"+mn+" " +td);
                         Venue.setText(ev.getVenue());
-                        NoLikes.setText(numL.toString());
+                        NoLikes.setText(Integer.toString(numL[0]));
 
                         Picasso.with(Events.this).load(ev.getImage().toString()).into(image);
                         image.getLayoutParams().height = 600;

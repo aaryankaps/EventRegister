@@ -7,11 +7,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <EditText
         android:id="@+id/newName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Name of Event"
         android:inputType="textPersonName"
@@ -32,11 +33,11 @@
         android:id="@+id/newDateBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="108dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="28dp"
         android:text="Date"
         app:layout_constraintEnd_toEndOf="@+id/newDate"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/newName" />
 
     <TextView
         android:id="@+id/newTime"
@@ -52,8 +53,7 @@
         android:id="@+id/newTimeBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginEnd="28dp"
         android:text="Time"
         app:layout_constraintEnd_toEndOf="@+id/newTime"
         app:layout_constraintTop_toBottomOf="@+id/newDateBtn" />
@@ -96,6 +96,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/selectImage" />
+
+
 
 
 </android.support.constraint.ConstraintLayout>

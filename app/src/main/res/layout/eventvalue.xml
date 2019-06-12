@@ -10,13 +10,21 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/host"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        app:layout_constraintBottom_toTopOf="@+id/date"
+        app:layout_constraintBottom_toTopOf="@+id/image"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="156dp" />
+        tools:layout_editor_absoluteX="163dp" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/date"
+        app:layout_constraintTop_toBottomOf="@+id/image"
+        tools:layout_editor_absoluteX="20dp" />
 
     <TextView
         android:id="@+id/date"
@@ -38,12 +46,39 @@
         android:id="@+id/venue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@+id/image"
         app:layout_constraintTop_toBottomOf="@+id/time"
         tools:layout_editor_absoluteX="156dp" />
     <ImageView
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/host"
+        app:layout_constraintBottom_toTopOf="@+id/name" />
+
+    <Button
+        android:id="@+id/like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Like"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/venue" />
+
+    <TextView
+        android:id="@+id/nolike"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/like"
+        app:layout_constraintTop_toBottomOf="@+id/venue" />
+
+    <Button
+        android:id="@+id/comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Comment"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/venue" />
 </android.support.constraint.ConstraintLayout>

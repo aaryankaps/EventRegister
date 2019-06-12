@@ -1,9 +1,19 @@
+package com.example.na00556573.eventregister;
+
+import java.util.Date;
+
 public class Comments{
     private String commentText;
     private String commentUser;
     private long commentTime;
 
     public Comments() {
+    }
+
+    public Comments(String commentText, String commentUser) {
+        this.commentText = commentText;
+        this.commentUser = commentUser;
+        this.commentTime = new Date().getTime();
     }
 
     public Comments(String commentText, String commentUser, long commentTime) {
