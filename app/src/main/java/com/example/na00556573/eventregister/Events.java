@@ -4,6 +4,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -34,6 +37,7 @@ import java.util.Date;
 
 
 public class Events extends AppCompatActivity {
+    private DrawerLayout draw;
     private FirebaseDatabase database;
     private DatabaseReference myRef;
     private FirebaseAuth mAuth;
@@ -82,6 +86,13 @@ public class Events extends AppCompatActivity {
 
             }
         });
+        Toolbar tool=findViewById(R.id.toolbar);
+        setSupportActionBar(tool);
+        draw=findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,draw,tool,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        draw.addDrawerListener(toggle);
+        toggle.syncState();
+
         lv= findViewById(R.id.EventList);
 
         Query query = FirebaseDatabase.getInstance().getReference().child("Events");
@@ -139,10 +150,10 @@ public class Events extends AppCompatActivity {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                 if(dataSnapshot.exists()) {
-                                    Like.setText("Unlike");
+                                    Like.setText("Not Interested");
                                 }
                                 else{
-                                    Like.setText("Like");
+                                    Like.setText("Interested");
                                 }
                             }
 
@@ -156,13 +167,13 @@ public class Events extends AppCompatActivity {
                         Like.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                if(Like.getText().toString().matches("Like")){
-                                    Like.setText("Unlike");
+                                if(Like.getText().toString().matches("Interested")){
+                                    Like.setText("Not Interested");
                                     numL[0]++;
-                                    drLike.setValue("True");
+                                    drLike.setValue("Interested");
                                 }
                                 else{
-                                    Like.setText("Like");
+                                    Like.setText("Interested");
                                     numL[0]--;
                                     drLike.setValue(null);
                                 }
@@ -208,7 +219,14 @@ public class Events extends AppCompatActivity {
         super.onStop();
         adapter.stopListening();
     }
-    public void openDialog(){
 
+    @Override
+    public void onBackPressed() {
+        if(draw.isDrawerOpen(GravityCompat.START)){
+            draw.closeDrawer(GravityCompat.START);
+        }
+        else{
+            super.onBackPressed();
+        }
     }
 }

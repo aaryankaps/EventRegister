@@ -17,7 +17,7 @@
         android:tint="@android:color/white"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        fab:fab_icon="@drawable/comment"
+        fab:fab_icon="@drawable/ic_comment"
         app:fabSize="mini" />
 
     <android.support.design.widget.TextInputLayout

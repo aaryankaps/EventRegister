@@ -15,4 +15,6 @@
         completions."
     </string>
     <string name="title_activity_events">Events</string>
+    <string name="navigation_drawer_open">Open Navigation</string>
+    <string name="navigation_drawer_close">Close Navigation</string>
 </resources>
