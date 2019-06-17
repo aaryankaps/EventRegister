@@ -95,11 +95,11 @@ public class Events extends AppCompatActivity {
             @Override
             protected void populateView(View v, Object model, int position) {
 
-                EventValue ev= (EventValue) model;
+                final EventValue ev= (EventValue) model;
                 String ed = ev.getDate();
-                String dd = ed.substring(0,2);
-                String mm = ed.substring(2,4);
-                String yy = ed.substring(4,8);
+                final String dd = ed.substring(0,2);
+                final String mm = ed.substring(2,4);
+                final String yy = ed.substring(4,8);
                 try {
                     java.util.Date c = sdf.parse(sdf.format(Calendar.getInstance().getTime()));
                     java.util.Date d = sdf.parse(dd + "/" + mm + "/" + yy);
@@ -172,8 +172,9 @@ public class Events extends AppCompatActivity {
                         Comment.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-
-                                Intent i= new Intent(getApplicationContext(),CommentSection.class);
+                                //Toast.makeText(getApplicationContext(), "Comment Clicked", Toast.LENGTH_SHORT).show();
+                                Intent i= new Intent(getApplicationContext(),CommentSec.class);
+                                i.putExtra("eventTitle", yy+mm+dd+ev.getTime()+ev.getVenue());
                                 startActivity(i);
                             }
                         });
