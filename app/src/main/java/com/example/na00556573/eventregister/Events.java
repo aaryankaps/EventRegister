@@ -4,11 +4,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,14 +38,14 @@ import java.util.Calendar;
 import java.util.Date;
 
 
-public class Events extends AppCompatActivity {
+public class Events extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private DrawerLayout draw;
     private FirebaseDatabase database;
-    private DatabaseReference myRef;
+    private DatabaseReference myRef,myRef2;
     private FirebaseAuth mAuth;
+    private FirebaseUser user;
     private String userID;
     private ListView lv;
-
     private FirebaseListAdapter adapter;
 
     @Override
@@ -62,7 +64,7 @@ public class Events extends AppCompatActivity {
         });
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
-        final FirebaseUser user = mAuth.getCurrentUser();
+        user = mAuth.getCurrentUser();
         userID = user.getUid();
         myRef = database.getReference("Unverified").child(userID);
         myRef.addValueEventListener(new ValueEventListener() {
@@ -88,11 +90,30 @@ public class Events extends AppCompatActivity {
         });
         Toolbar tool=findViewById(R.id.toolbar);
         setSupportActionBar(tool);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
         draw=findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,draw,tool,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         draw.addDrawerListener(toggle);
         toggle.syncState();
+        if (savedInstanceState == null) {
+            navigationView.setCheckedItem(R.id.home);
+        }
+        final TextView nm=navigationView.getHeaderView(0).findViewById(R.id.userName);
+        final TextView em=navigationView.getHeaderView(0).findViewById(R.id.userEmail);
+        myRef2=database.getReference("Users").child(userID);
+        myRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                nm.setText(dataSnapshot.child("Name").getValue().toString());
+                em.setText(dataSnapshot.child("Email").getValue().toString());
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         lv= findViewById(R.id.EventList);
 
         Query query = FirebaseDatabase.getInstance().getReference().child("Events");
@@ -219,14 +240,45 @@ public class Events extends AppCompatActivity {
         super.onStop();
         adapter.stopListening();
     }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Intent i;
+        switch (item.getItemId()) {
+            case R.id.home:
+                i=new Intent(getApplicationContext(),Events.class);
+                startActivity(i);
+                break;
+            case R.id.account:
+                i=new Intent(getApplicationContext(),RegisterActivity.class);
+                startActivity(i);
+                break;
+            case R.id.post:
+                i=new Intent(getApplicationContext(),NeweventActivity.class);
+                startActivity(i);
+                break;
+            case R.id.sign_out:
+                mAuth.signOut();
+                if(FirebaseAuth.getInstance().getCurrentUser()==null) {
+                    startActivity(new Intent(Events.this, MainActivity.class));
+                    Toast.makeText(getApplicationContext(), "Sign out Success", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+            case R.id.social:
+                Toast.makeText(this, "View our Social Media", Toast.LENGTH_SHORT).show();
+                break;
+        }
 
+        draw.closeDrawer(GravityCompat.START);
+        return true;
+    }
     @Override
     public void onBackPressed() {
         if(draw.isDrawerOpen(GravityCompat.START)){
             draw.closeDrawer(GravityCompat.START);
         }
         else{
-            super.onBackPressed();
+            finish();
         }
     }
 }
