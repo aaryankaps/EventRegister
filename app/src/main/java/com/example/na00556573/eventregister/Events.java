@@ -250,7 +250,7 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
                 startActivity(i);
                 break;
             case R.id.account:
-                i=new Intent(getApplicationContext(),RegisterActivity.class);
+                i=new Intent(getApplicationContext(),AccountActivity.class);
                 startActivity(i);
                 break;
             case R.id.post:
