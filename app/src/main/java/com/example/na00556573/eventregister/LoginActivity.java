@@ -60,6 +60,7 @@ public class LoginActivity extends AppCompatActivity {
                                 //Toast.makeText(getApplicationContext(), "Login Successful", Toast.LENGTH_LONG).show();
 
                                 Intent i = new Intent(LoginActivity.this, Events.class);
+                                i.putExtra("Previous","Login");
                                 startActivity(i);
                             }
                             else{

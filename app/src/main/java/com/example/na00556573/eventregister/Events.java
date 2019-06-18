@@ -246,6 +246,7 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
         switch (item.getItemId()) {
             case R.id.home:
                 i=new Intent(getApplicationContext(),Events.class);
+                i.putExtra("Previous","Home");
                 startActivity(i);
                 break;
             case R.id.account:
@@ -277,8 +278,13 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
         if(draw.isDrawerOpen(GravityCompat.START)){
             draw.closeDrawer(GravityCompat.START);
         }
+        else if(getIntent().getStringExtra("Previous").equals("Main") || getIntent().getStringExtra("Previous").equals("Login")){
+            finishAffinity();
+            System.exit(0);
+        }
         else{
-            finish();
+            //Toast.makeText(getApplicationContext(),getIntent().getStringExtra("Previous"),Toast.LENGTH_SHORT).show();
+            super.onBackPressed();
         }
     }
 }
