@@ -96,17 +96,23 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,draw,tool,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         draw.addDrawerListener(toggle);
         toggle.syncState();
-        if (savedInstanceState == null) {
-            navigationView.setCheckedItem(R.id.home);
-        }
+        navigationView.setCheckedItem(R.id.home);
+
         final TextView nm=navigationView.getHeaderView(0).findViewById(R.id.userName);
         final TextView em=navigationView.getHeaderView(0).findViewById(R.id.userEmail);
+        final ImageView img=navigationView.getHeaderView(0).findViewById(R.id.userImg);
         myRef2=database.getReference("Users").child(userID);
         myRef2.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 nm.setText(dataSnapshot.child("Name").getValue().toString());
                 em.setText(dataSnapshot.child("Email").getValue().toString());
+                if(dataSnapshot.child("Image").exists()) {
+                    Picasso.with(Events.this).load(dataSnapshot.child("Image").getValue().toString()).into(img);
+                    img.getLayoutParams().height = 200;
+                    img.getLayoutParams().width = 200;
+                    img.setScaleType(ImageView.ScaleType.FIT_XY);
+                }
             }
 
             @Override
@@ -117,6 +123,7 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
         lv= findViewById(R.id.EventList);
 
         Query query = FirebaseDatabase.getInstance().getReference().child("Events");
+        //.limitToLast(1)
         FirebaseListOptions<EventValue> options = new FirebaseListOptions.Builder<EventValue>()
                 .setLayout(R.layout.eventvalue)
                 .setQuery(query,EventValue.class)
@@ -266,6 +273,8 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
                 }
                 break;
             case R.id.social:
+                i=new Intent(getApplicationContext(),Social.class);
+                startActivity(i);
                 Toast.makeText(this, "View our Social Media", Toast.LENGTH_SHORT).show();
                 break;
         }
@@ -283,7 +292,6 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
             System.exit(0);
         }
         else{
-            //Toast.makeText(getApplicationContext(),getIntent().getStringExtra("Previous"),Toast.LENGTH_SHORT).show();
             super.onBackPressed();
         }
     }

@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="83dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Phone No:"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/accName" />
@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="83dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Email: "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/accPhone" />
@@ -41,7 +41,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="83dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:text="Age: "
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/accEmail" />
@@ -49,9 +49,9 @@
     <EditText
         android:id="@+id/accNameVal"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="56dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:layout_marginEnd="20dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:textSize="14sp"
@@ -62,8 +62,9 @@
     <EditText
         android:id="@+id/accPhoneVal"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
-        android:layout_marginEnd="16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
         android:ems="10"
         android:inputType="phone"
         android:textSize="14sp"
@@ -74,16 +75,16 @@
         android:id="@+id/accEmailVal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/accPhoneVal"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/accPhoneVal" />
 
     <EditText
         android:id="@+id/accAgeVal"
         android:layout_width="wrap_content"
-        android:layout_height="25dp"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginTop="8dp"
         android:ems="10"
         android:inputType="phone"
         android:textSize="14sp"
@@ -97,6 +98,7 @@
         android:layout_marginBottom="44dp"
         android:layout_marginStart="80dp"
         android:text="Add Image"
+        android:onClick="selectProfileImage"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -111,7 +113,7 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView2"
+        android:id="@+id/accPic"
         android:layout_width="253dp"
         android:layout_height="188dp"
         android:layout_marginBottom="124dp"
