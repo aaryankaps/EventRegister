@@ -42,7 +42,7 @@ public class AccountActivity extends AppCompatActivity {
     ImageView imageView;
     final int IMAGE_REQUEST=71;
     Uri imageLocationPath;
-
+    int imgTest =0;
     FirebaseDatabase database;
     FirebaseAuth mAuth;
     DatabaseReference myRef;
@@ -75,6 +75,9 @@ public class AccountActivity extends AppCompatActivity {
                 if (dataSnapshot.child("Phone").exists()) {
                     phoneS = dataSnapshot.child("Phone").getValue().toString();
                     phoneEt.setText(phoneS);
+                }
+                if (dataSnapshot.child("Image").exists()){
+                    imgTest = 1;
                 }
                 emailTv.setText(email);
                 ageEt.setText(ageS);
@@ -151,6 +154,19 @@ public class AccountActivity extends AppCompatActivity {
                                         }
                                     });
                                 }
+                            }
+                        });
+                    }
+                    else if(imgTest == 1){
+                        myRef.child("Name").setValue(name);
+                        myRef.child("Age").setValue(ageS);
+                        myRef.child("Phone").setValue(phoneS).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getApplicationContext(), "Updated Successfully", Toast.LENGTH_SHORT).show();
+                                Intent i = new Intent(getApplicationContext(), Events.class);
+                                i.putExtra("Previous","Account");
+                                startActivity(i);
                             }
                         });
                     }

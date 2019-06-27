@@ -7,23 +7,26 @@ public class Posts {
     private String postUser;
     private long postTime;
     private String postLike;
+    private String postKey;
 
     public Posts() {
     }
 
-    public Posts(String postText, String postUser, String postLike) {
+    public Posts(String postText, String postUser, String postLike, String postKey) {
         this.postText = postText;
         this.postUser = postUser;
         this.postLike = postLike;
+        this.postKey = postKey;
         this.postTime = new Date().getTime();
 
     }
 
-    public Posts(String postText, String postUser, long postTime, String postLike) {
+    public Posts(String postText, String postUser, long postTime, String postLike, String postKey) {
         this.postText = postText;
         this.postUser = postUser;
         this.postTime = postTime;
         this.postLike = postLike;
+        this.postKey = postKey;
     }
 
     public String getPostText() {
@@ -56,5 +59,13 @@ public class Posts {
 
     public void setPostLike(String postLike) {
         this.postLike = postLike;
+    }
+
+    public String getPostKey() {
+        return postKey;
+    }
+
+    public void setPostKey(String postKey) {
+        this.postKey = postKey;
     }
 }

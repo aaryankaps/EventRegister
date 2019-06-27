@@ -236,6 +236,7 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
                 }
 
             }
+
         };
         lv.setAdapter(adapter);
     }

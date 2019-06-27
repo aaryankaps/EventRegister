@@ -1,5 +1,6 @@
 package com.example.na00556573.eventregister;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
@@ -26,14 +27,16 @@ import com.google.firebase.database.ValueEventListener;
 public class Social extends AppCompatActivity {
 
         FirebaseListAdapter<Posts> adapter;
-        @Override
+        String[] key = new String[1];
+
+    @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_social);
             FloatingActionButton fab =
                     (FloatingActionButton)findViewById(R.id.fabPost);
             final FirebaseUser user=  FirebaseAuth.getInstance().getCurrentUser();
-            final String[] name = new String[1];
+            final String[] name= new String[1];
 
             DatabaseReference drhst= FirebaseDatabase.getInstance().getReference("Users").child(user.getUid()).child("Name");
             drhst.addValueEventListener(new ValueEventListener() {
@@ -50,7 +53,9 @@ public class Social extends AppCompatActivity {
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(getApplicationContext(), "New post added", Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(getApplicationContext(), NewPost.class);
+                    startActivity(i);
+                    //Toast.makeText(getApplicationContext(), "Add New post", Toast.LENGTH_SHORT).show();
                 }
             });
             ListView listOfMessages = (ListView)findViewById(R.id.list_of_posts);
@@ -62,7 +67,7 @@ public class Social extends AppCompatActivity {
                     .build();
             adapter = new FirebaseListAdapter<Posts>(options) {        //put eventname
                 @Override
-                protected void populateView(View v, Posts model, int position) {
+                protected void populateView(View v, Posts model, final int position) {
                     // Get references to the views of message.xml
                     TextView commentText = (TextView) v.findViewById(R.id.post_text);
                     TextView commentUser = (TextView) v.findViewById(R.id.post_user);
@@ -70,8 +75,22 @@ public class Social extends AppCompatActivity {
                     final Button Like = v.findViewById(R.id.post_like);
                     TextView commentLike = (TextView) v.findViewById(R.id.post_nolike);
                     final int[] numL = {Integer.parseInt(model.getPostLike())};
+//                    FirebaseDatabase.getInstance().getReference("Posts").orderByChild("postTime").equalTo(model.getPostTime()).addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+//                            for(DataSnapshot child: dataSnapshot.getChildren()){
+//                                key[0] = child.getKey();
+//                                FirebaseDatabase.getInstance().getReference("Posts").child(key[0]).child("postKey").setValue(key[0]);
+//                                }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError databaseError) {
+//
+//                        }
+//                    });
 
-                    final DatabaseReference drLike=FirebaseDatabase.getInstance().getReference("PostLike").child(user.getUid()).child("LhUvDSPDNSFNwLP8Iei");
+                    final DatabaseReference drLike=FirebaseDatabase.getInstance().getReference("PostLike").child(user.getUid()).child(model.getPostKey());
                     drLike.addValueEventListener(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -89,7 +108,7 @@ public class Social extends AppCompatActivity {
                         }
                     });
 
-                    final DatabaseReference drNLike = FirebaseDatabase.getInstance().getReference("Posts").child("-LhUvDSPDNSFNwLP8Iei");
+                    final DatabaseReference drNLike = FirebaseDatabase.getInstance().getReference("Posts").child(model.getPostKey());
                     Like.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -112,9 +131,13 @@ public class Social extends AppCompatActivity {
                     commentLike.setText(model.getPostLike());
 
                     // Format the date before showing it
-                    commentTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)",
-                            model.getPostTime()));
+                    commentTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)", model.getPostTime()));
 
+                }
+
+                @Override
+                public Posts getItem(int position) {
+                    return super.getItem(getCount()-position-1);
                 }
             };
 
