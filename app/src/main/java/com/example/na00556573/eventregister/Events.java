@@ -3,6 +3,7 @@ package com.example.na00556573.eventregister;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -52,8 +54,8 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_events);
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+//        Toolbar toolbar = findViewById(R.id.toolbar);
+//        setSupportActionBar(toolbar);
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -140,19 +142,22 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
                 final String mm = ed.substring(2,4);
                 final String yy = ed.substring(4,8);
                 try {
+                    final TextView host=v.findViewById(R.id.host);
+                    ImageView image= v.findViewById(R.id.image);
+                    TextView Name = v.findViewById(R.id.name);
+                    TextView Date = v.findViewById(R.id.date);
+                    TextView Time = v.findViewById(R.id.time);
+                    TextView Venue= v.findViewById(R.id.venue);
+                    final Button Like = v.findViewById(R.id.like);
+                    TextView NoLikes= v.findViewById(R.id.nolike);
+                    Button Comment = v.findViewById(R.id.comment);
+                    ConstraintLayout cl =v.findViewById(R.id.event_constraint);
+
                     java.util.Date c = sdf.parse(sdf.format(Calendar.getInstance().getTime()));
                     java.util.Date d = sdf.parse(dd + "/" + mm + "/" + yy);
                     if (d.compareTo(c)>=0){
                         //((ViewGroup)v.getParent()).removeView(v);
-                        final TextView host=v.findViewById(R.id.host);
-                        ImageView image= v.findViewById(R.id.image);
-                        TextView Name = v.findViewById(R.id.name);
-                        TextView Date = v.findViewById(R.id.date);
-                        TextView Time = v.findViewById(R.id.time);
-                        TextView Venue= v.findViewById(R.id.venue);
-                        final Button Like = v.findViewById(R.id.like);
-                        TextView NoLikes= v.findViewById(R.id.nolike);
-                        Button Comment = v.findViewById(R.id.comment);
+                        cl.setVisibility(View.VISIBLE);
                         final int[] numL = {Integer.parseInt(ev.getLikes())};
 
                         String tm = ev.getTime();
@@ -230,6 +235,21 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
 
 
 
+                    }
+                    else {
+                        v.setVisibility(View.GONE);
+                        host.setVisibility(View.GONE);
+                        image.setVisibility(View.GONE);
+                        Name.setVisibility(View.GONE);
+                        Date.setVisibility(View.GONE);
+                        Time.setVisibility(View.GONE);
+                        Venue.setVisibility(View.GONE);
+                        Like.setVisibility(View.GONE);
+                        NoLikes.setVisibility(View.GONE);
+                        Comment.setVisibility(View.GONE);
+                        cl.setVisibility(View.GONE);
+                        ((ViewGroup)v.getParent()).removeView(v);
+                        //v.setLayoutParams(new ListView.LayoutParams(0, 0));
                     }
                 }catch (Exception e){
                     e.printStackTrace();

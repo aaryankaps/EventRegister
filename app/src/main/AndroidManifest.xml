@@ -31,8 +31,12 @@
             android:name=".Events"
             android:label="@string/title_activity_events"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".NeweventActivity" />
-        <activity android:name=".AccountActivity" />
+        <activity android:name=".NeweventActivity"
+            android:label="@string/title_neweventActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".AccountActivity"
+            android:label="@string/title_accountActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".NewPost"></activity>
     </application>
 

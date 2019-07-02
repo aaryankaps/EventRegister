@@ -9,9 +9,15 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.app.DatePickerDialog;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -27,25 +33,31 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.util.Calendar;
 
 import static android.widget.RelativeLayout.TRUE;
 
-public class NeweventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener {
+public class NeweventActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, NavigationView.OnNavigationItemSelectedListener{
     private String name, d, m, y, date, time, venue, url;
     EditText nEt, vEt;
     ImageView uploadPic;
     final int IMAGE_REQUEST=71;
     Uri imageLocationPath;
-    DatabaseReference myRef;
+    DatabaseReference myRef, myRef2;
     StorageReference mStorageRef;
+    private DrawerLayout draw;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +68,7 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
         mStorageRef= FirebaseStorage.getInstance().getReference("Events");
         date="";
         time="";
+
         datebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -104,6 +117,38 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
                 myRef = database.getReference("Events");
                 upload();
 
+            }
+        });
+        Toolbar tool=findViewById(R.id.toolbar);
+        setSupportActionBar(tool);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        draw=findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,draw,tool,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        draw.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setCheckedItem(R.id.post);
+
+        final TextView nm=navigationView.getHeaderView(0).findViewById(R.id.userName);
+        final TextView em=navigationView.getHeaderView(0).findViewById(R.id.userEmail);
+        final ImageView img=navigationView.getHeaderView(0).findViewById(R.id.userImg);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        myRef2=database.getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        myRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                nm.setText(dataSnapshot.child("Name").getValue().toString());
+                em.setText(dataSnapshot.child("Email").getValue().toString());
+                if(dataSnapshot.child("Image").exists()) {
+                    Picasso.with(NeweventActivity.this).load(dataSnapshot.child("Image").getValue().toString()).into(img);
+                    img.getLayoutParams().height = 200;
+                    img.getLayoutParams().width = 200;
+                    img.setScaleType(ImageView.ScaleType.FIT_XY);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
         });
@@ -249,4 +294,49 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
         }
         return null;
    }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Intent i;
+        switch (item.getItemId()) {
+            case R.id.home:
+                i=new Intent(getApplicationContext(),Events.class);
+                i.putExtra("Previous","Post");
+                startActivity(i);
+                break;
+            case R.id.account:
+                i=new Intent(getApplicationContext(),AccountActivity.class);
+                startActivity(i);
+                break;
+            case R.id.post:
+                i=new Intent(getApplicationContext(),NeweventActivity.class);
+                startActivity(i);
+                break;
+            case R.id.sign_out:
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+                if(FirebaseAuth.getInstance().getCurrentUser()==null) {
+                    startActivity(new Intent(NeweventActivity.this, MainActivity.class));
+                    Toast.makeText(getApplicationContext(), "Sign out Success", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+            case R.id.social:
+                i=new Intent(getApplicationContext(),Social.class);
+                startActivity(i);
+                Toast.makeText(this, "View our Social Media", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        draw.closeDrawer(GravityCompat.START);
+        return true;
+    }
+    @Override
+    public void onBackPressed() {
+        if (draw.isDrawerOpen(GravityCompat.START)) {
+            draw.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 }
