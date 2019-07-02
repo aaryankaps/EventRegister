@@ -1,14 +1,22 @@
 package com.example.na00556573.eventregister;
 
 import android.content.Intent;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,11 +31,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
-public class Social extends AppCompatActivity {
+public class Social extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
         FirebaseListAdapter<Posts> adapter;
         String[] key = new String[1];
+        DrawerLayout draw;
 
     @Override
         protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +77,7 @@ public class Social extends AppCompatActivity {
                     .build();
             adapter = new FirebaseListAdapter<Posts>(options) {        //put eventname
                 @Override
-                protected void populateView(View v, Posts model, final int position) {
+                protected void populateView(final View v, final Posts model, final int position) {
                     // Get references to the views of message.xml
                     TextView commentText = (TextView) v.findViewById(R.id.post_text);
                     TextView commentUser = (TextView) v.findViewById(R.id.post_user);
@@ -125,6 +135,29 @@ public class Social extends AppCompatActivity {
                             drNLike.child("postLike").setValue(Integer.toString(numL[0]));
                         }
                     });
+
+                    DatabaseReference imgRef=FirebaseDatabase.getInstance().getReference("Posts").child(model.getPostKey()).child("postImage");
+                    imgRef.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            ImageView image= v.findViewById(R.id.post_Image);
+                            if(dataSnapshot.exists()){
+                                Picasso.with(Social.this).load(dataSnapshot.getValue().toString()).into(image);
+                                image.getLayoutParams().height = 600;
+                                image.getLayoutParams().width = 600;
+                                image.setScaleType(ImageView.ScaleType.FIT_XY);
+                                image.setVisibility(View.VISIBLE);
+                            }
+                            else {
+                                image.setVisibility(View.GONE);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                        }
+                    });
                     // Set their text
                     commentText.setText(model.getPostText());
                     commentUser.setText(model.getPostUser());
@@ -132,6 +165,17 @@ public class Social extends AppCompatActivity {
 
                     // Format the date before showing it
                     commentTime.setText(DateFormat.format("dd-MM-yyyy (HH:mm:ss)", model.getPostTime()));
+
+                    Button Comment = v.findViewById(R.id.post_comment);
+                    Comment.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            //Toast.makeText(getApplicationContext(), "Comment Clicked", Toast.LENGTH_SHORT).show();
+                            Intent i= new Intent(getApplicationContext(),postCommentSection.class);
+                            i.putExtra("postTitle", model.getPostKey());
+                            startActivity(i);
+                        }
+                    });
 
                 }
 
@@ -142,6 +186,39 @@ public class Social extends AppCompatActivity {
             };
 
             listOfMessages.setAdapter(adapter);
+        Toolbar tool=findViewById(R.id.toolbar);
+        setSupportActionBar(tool);
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        draw=findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,draw,tool,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
+        draw.addDrawerListener(toggle);
+        toggle.syncState();
+        navigationView.setCheckedItem(R.id.account);
+
+        final TextView nm=navigationView.getHeaderView(0).findViewById(R.id.userName);
+        final TextView em=navigationView.getHeaderView(0).findViewById(R.id.userEmail);
+        final ImageView img=navigationView.getHeaderView(0).findViewById(R.id.userImg);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef2=database.getReference("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        myRef2.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                nm.setText(dataSnapshot.child("Name").getValue().toString());
+                em.setText(dataSnapshot.child("Email").getValue().toString());
+                if(dataSnapshot.child("Image").exists()) {
+                    Picasso.with(Social.this).load(dataSnapshot.child("Image").getValue().toString()).into(img);
+                    img.getLayoutParams().height = 200;
+                    img.getLayoutParams().width = 200;
+                    img.setScaleType(ImageView.ScaleType.FIT_XY);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         }
         protected void onStart(){
             super.onStart();
@@ -151,4 +228,48 @@ public class Social extends AppCompatActivity {
             super.onStop();
             adapter.stopListening();
         }
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        Intent i;
+        switch (item.getItemId()) {
+            case R.id.home:
+                i=new Intent(getApplicationContext(),Events.class);
+                i.putExtra("Previous","Social");
+                startActivity(i);
+                break;
+            case R.id.account:
+                i=new Intent(getApplicationContext(),AccountActivity.class);
+                startActivity(i);
+                break;
+            case R.id.post:
+                i=new Intent(getApplicationContext(),NeweventActivity.class);
+                startActivity(i);
+                break;
+            case R.id.sign_out:
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                mAuth.signOut();
+                if(FirebaseAuth.getInstance().getCurrentUser()==null) {
+                    startActivity(new Intent(Social.this, MainActivity.class));
+                    Toast.makeText(getApplicationContext(), "Sign out Success", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+            case R.id.social:
+                i=new Intent(getApplicationContext(),Social.class);
+                startActivity(i);
+                Toast.makeText(this, "View our Social Media", Toast.LENGTH_SHORT).show();
+                break;
+        }
+
+        draw.closeDrawer(GravityCompat.START);
+        return true;
+    }
+    @Override
+    public void onBackPressed() {
+        if (draw.isDrawerOpen(GravityCompat.START)) {
+            draw.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
     }

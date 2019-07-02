@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 public class NewPost extends AppCompatActivity {
     TextView postContent;
@@ -68,20 +70,53 @@ public class NewPost extends AppCompatActivity {
         postSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String content=postContent.getText().toString();
-                if(content.isEmpty()){
+                final String content = postContent.getText().toString();
+                if (content.isEmpty()) {
                     postContent.setError("Post content cannot be empty");
                     postContent.requestFocus();
                     return;
                 }
-                String key = myRef.push().getKey();
-                myRef.child(key).setValue(new Posts(content, name[0], "0", key)).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        postContent.setText("");
-                        Toast.makeText(getApplicationContext(),"Post Added", Toast.LENGTH_SHORT).show();
-                    }
-                });
+                final String key = myRef.push().getKey();
+                if (imageLocationPath == null) {
+                    myRef.child(key).setValue(new Posts(content, name[0], "0", key)).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            postContent.setText("");
+                            Toast.makeText(getApplicationContext(), "Post Added", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else {
+                    Toast.makeText(getApplicationContext(), "Uploading", Toast.LENGTH_LONG).show();
+                    final String nameOfImage = key + "." + getExtension(imageLocationPath);
+                    final StorageReference imageRef = mStorageRef.child(nameOfImage);
+                    UploadTask ut = imageRef.putFile(imageLocationPath);
+                    ut.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+                            return imageRef.getDownloadUrl();
+                        }
+
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                String url = task.getResult().toString();
+                                myRef.child(key).setValue(new Posts(content, name[0], "0", key));
+                                myRef.child(key).child("postImage").setValue(url).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        postContent.setText("");
+                                        postImg.setImageResource(android.R.color.transparent);
+                                        Toast.makeText(getApplicationContext(), "Post Added", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
             }
         });
     }
@@ -92,7 +127,7 @@ public class NewPost extends AppCompatActivity {
             imgIntent.setAction(Intent.ACTION_GET_CONTENT);
             startActivityForResult(imgIntent, IMAGE_REQUEST);
         }catch (Exception e){
-            Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT);
+            Toast.makeText(this,e.getMessage(),Toast.LENGTH_SHORT).show();
         }
     }
 

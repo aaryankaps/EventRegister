@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.na00556573.eventregister">
-
     <!-- To auto-complete the email text field in the login form with the user's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
@@ -14,8 +13,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Social" />
-        <activity android:name=".CommentSec" />
+        <activity android:name=".postCommentSection"
+            android:label="@string/title_postComments"/>
+        <activity
+            android:name=".Social"
+            android:label="@string/title_socialActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CommentSec"
+            android:label="@string/title_Comments" />
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,13 +37,17 @@
             android:name=".Events"
             android:label="@string/title_activity_events"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".NeweventActivity"
+        <activity
+            android:name=".NeweventActivity"
             android:label="@string/title_neweventActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".AccountActivity"
+        <activity
+            android:name=".AccountActivity"
             android:label="@string/title_accountActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".NewPost"></activity>
+        <activity
+            android:name=".NewPost"
+            android:label="@string/title_newPostActivity" />
     </application>
 
 </manifest>
