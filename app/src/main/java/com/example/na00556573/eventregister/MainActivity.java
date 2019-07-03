@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(user!=null){
-                    Intent i = new Intent(getApplicationContext(),Events.class);
+                    Intent i = new Intent(getApplicationContext(),Main2Activity.class);
                     i.putExtra("Previous","Main");
                     startActivity(i);
                     //Toast.makeText(getApplicationContext(),"User logged in", Toast.LENGTH_SHORT).show();
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(user!=null){
-                    Intent i = new Intent(getApplicationContext(),Events.class);
+                    Intent i = new Intent(getApplicationContext(),Main2Activity.class);
                     i.putExtra("Previous","Main");
                     startActivity(i);
                     //Toast.makeText(getApplicationContext(),"User logged in", Toast.LENGTH_SHORT).show();

@@ -20,6 +20,7 @@
     <string name="title_socialActivity">Social Media</string>
     <string name="title_Comments">Comments for Events</string>
     <string name="title_postComments">Comments for Posts</string>
+    <string name="title_main2activity">Home</string>
     <string name="title_newPostActivity">Make a new Post</string>
     <string name="navigation_drawer_open">Open Navigation</string>
     <string name="navigation_drawer_close">Close Navigation</string>

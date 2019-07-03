@@ -55,6 +55,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
     DatabaseReference myRef;
     StorageReference mStorageRef;
     DrawerLayout draw;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -189,7 +190,7 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         });
         Toolbar tool=findViewById(R.id.toolbar);
         setSupportActionBar(tool);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         draw=findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,draw,tool,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
@@ -288,6 +289,10 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
                 startActivity(i);
                // Toast.makeText(this, "View our Social Media", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.postSocial:
+                i=new Intent(getApplicationContext(),NewPost.class);
+                startActivity(i);
+                break;
         }
 
         draw.closeDrawer(GravityCompat.START);
@@ -300,5 +305,11 @@ public class AccountActivity extends AppCompatActivity implements NavigationView
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigationView.setCheckedItem(R.id.account);
     }
 }

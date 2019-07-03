@@ -23,5 +23,9 @@
             android:id="@+id/social"
             android:icon="@drawable/ic_message"
             android:title="Social Media" />
+        <item
+            android:id="@+id/postSocial"
+            android:icon="@drawable/ic_ad"
+            android:title="Post New Social" />
     </group>
 </menu>

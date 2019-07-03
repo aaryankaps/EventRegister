@@ -49,6 +49,7 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
     private String userID;
     private ListView lv;
     private FirebaseListAdapter adapter;
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +93,7 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
         });
         Toolbar tool=findViewById(R.id.toolbar);
         setSupportActionBar(tool);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         draw=findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,draw,tool,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
@@ -298,6 +299,10 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
                 startActivity(i);
                 //Toast.makeText(this, "View our Social Media", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.postSocial:
+                i=new Intent(getApplicationContext(),NewPost.class);
+                startActivity(i);
+                break;
         }
 
         draw.closeDrawer(GravityCompat.START);
@@ -315,5 +320,11 @@ public class Events extends AppCompatActivity implements NavigationView.OnNaviga
         else{
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigationView.setCheckedItem(R.id.home);
     }
 }

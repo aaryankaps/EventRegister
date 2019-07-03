@@ -56,8 +56,8 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
     Uri imageLocationPath;
     DatabaseReference myRef, myRef2;
     StorageReference mStorageRef;
-    private DrawerLayout draw;
-
+    DrawerLayout draw;
+    NavigationView navigationView;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -121,7 +121,7 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
         });
         Toolbar tool=findViewById(R.id.toolbar);
         setSupportActionBar(tool);
-        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         draw=findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,draw,tool,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
@@ -325,6 +325,10 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
                 startActivity(i);
               //  Toast.makeText(this, "View our Social Media", Toast.LENGTH_SHORT).show();
                 break;
+            case R.id.postSocial:
+                i=new Intent(getApplicationContext(),NewPost.class);
+                startActivity(i);
+                break;
         }
 
         draw.closeDrawer(GravityCompat.START);
@@ -337,6 +341,12 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        navigationView.setCheckedItem(R.id.post);
     }
 
 }
