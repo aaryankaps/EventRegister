@@ -19,9 +19,9 @@
             android:id="@+id/sign_out"
             android:icon="@drawable/ic_signout"
             android:title="Sign Out" />
+        <item
+            android:id="@+id/social"
+            android:icon="@drawable/ic_message"
+            android:title="Social Media" />
     </group>
-    <item
-        android:id="@+id/social"
-        android:icon="@drawable/ic_message"
-        android:title="Social Media" />
 </menu>

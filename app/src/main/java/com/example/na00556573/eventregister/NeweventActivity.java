@@ -323,7 +323,7 @@ public class NeweventActivity extends AppCompatActivity implements DatePickerDia
             case R.id.social:
                 i=new Intent(getApplicationContext(),Social.class);
                 startActivity(i);
-                Toast.makeText(this, "View our Social Media", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(this, "View our Social Media", Toast.LENGTH_SHORT).show();
                 break;
         }
 

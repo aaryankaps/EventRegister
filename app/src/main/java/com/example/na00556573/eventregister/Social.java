@@ -194,7 +194,7 @@ public class Social extends AppCompatActivity implements NavigationView.OnNaviga
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,draw,tool,R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         draw.addDrawerListener(toggle);
         toggle.syncState();
-        navigationView.setCheckedItem(R.id.account);
+        navigationView.setCheckedItem(R.id.social);
 
         final TextView nm=navigationView.getHeaderView(0).findViewById(R.id.userName);
         final TextView em=navigationView.getHeaderView(0).findViewById(R.id.userEmail);
@@ -257,7 +257,7 @@ public class Social extends AppCompatActivity implements NavigationView.OnNaviga
             case R.id.social:
                 i=new Intent(getApplicationContext(),Social.class);
                 startActivity(i);
-                Toast.makeText(this, "View our Social Media", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, "View our Social Media", Toast.LENGTH_SHORT).show();
                 break;
         }
 
